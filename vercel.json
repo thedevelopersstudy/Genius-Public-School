@@ -1,0 +1,41 @@
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist/client",
+  "devCommand": "npm run dev",
+  "env": {
+    "NODE_ENV": "production"
+  },
+  "functions": {
+    "api/index.js": {
+      "includeFiles": "dist/server/**",
+      "memory": 3008,
+      "maxDuration": 60
+    },
+    "api/[...slug].js": {
+      "includeFiles": "dist/server/**",
+      "memory": 3008,
+      "maxDuration": 60
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/api"
+    },
+    {
+      "source": "/:path((?!assets/|favicon.ico|deploy-check.txt).*)",
+      "destination": "/api/:path"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    }
+  ]
+}
